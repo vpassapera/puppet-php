@@ -56,7 +56,7 @@ class php::extension::xmlrpc(
     package  => $package,
     provider => $provider
   }
-
+  ->
   php::config { 'php-extension-xmlrpc':
     file   => $inifile,
     config => $settings
