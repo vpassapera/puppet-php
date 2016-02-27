@@ -20,8 +20,13 @@
 #   The path to the extension ini file
 #
 # [*settings*]
-#   Hash with 'set' nested hash of key => value
-#   set changes to agues when applied to *inifile*
+#   Array of agues 'set' commands
+#
+# [*plugin_config*]
+#   Hash defining master(s), slaves(s) and failover
+#
+# [*plugin_config_path*]
+#   Path to the plugin configuration file
 #
 # === Variables
 #
@@ -35,6 +40,7 @@
 #
 # php::extension::mysqlnd_ms::ensure: 'latest'
 # php::extension::mysqlnd_ms::provider: 'pecl'
+# php::extension::mysqlnd_ms::plugin_config_path: '/etc/php5/fpm/mysqlnd_ms.json'
 # php::extension::mysqlnd_ms::settings:
 #       - 'set .anon/#comment[1] "configuration for PHP mysqlnd_ms module"'
 #       - 'set .anon/#comment[2] "priority=30"'
@@ -42,6 +48,16 @@
 #       - 'set PHP/mysqlnd_ms.enable 1'
 #       - 'set PHP/mysqlnd_ms.config_file "/etc/php5/fpm/mysqlnd_ms.json"'
 #       - 'set PHP/extension mysqlnd_ms.so'
+# php::extension::mysqlnd_ms::plugin_config:
+#     tomtest:
+#         master:
+#             master_0:
+#                 host: "host.yourdomain.tld"
+#         slave:
+#             slave_0:
+#                 host: "host.yourdomain.tld"
+#                 port: 3307
+#         failover: 'master'
 #
 # === Authors
 #
@@ -53,12 +69,13 @@
 # Copyright 2012-2016 Christian "Jippi" Winther, unless otherwise noted.
 #
 class php::extension::mysqlnd_ms(
-  $ensure   = $php::extension::mysqlnd_ms::params::ensure,
-  $package  = $php::extension::mysqlnd_ms::params::package,
-  $provider = $php::extension::mysqlnd_ms::params::provider,
-  $inifile  = $php::extension::mysqlnd_ms::params::inifile,
-  $settings = $php::extension::mysqlnd_ms::params::settings,
-  $plugin_config = $php::extension::mysqlnd_ms::params::plugin_config
+  $ensure             = $php::extension::mysqlnd_ms::params::ensure,
+  $package            = $php::extension::mysqlnd_ms::params::package,
+  $provider           = $php::extension::mysqlnd_ms::params::provider,
+  $inifile            = $php::extension::mysqlnd_ms::params::inifile,
+  $settings           = $php::extension::mysqlnd_ms::params::settings,
+  $plugin_config      = $php::extension::mysqlnd_ms::params::plugin_config,
+  $plugin_config_path = $php::extension::mysqlnd_ms::params::plugin_config_path
 ) inherits php::extension::mysqlnd_ms::params {
 
   php::extension { 'mysqlnd_ms':
@@ -73,12 +90,12 @@ class php::extension::mysqlnd_ms(
   }
   # TODO: add one more parameter to customize where json file is saved
   if ($ensure == 'absent') {
-    file { "/etc/php5/fpm/mysqlnd_ms.json":
+    file { $plugin_config_path:
       ensure => absent,
       require => Php::Config['php-extension-mysqlnd_ms'],
     }
   } else {
-    file { "/etc/php5/fpm/mysqlnd_ms.json":
+    file { $plugin_config_path:
       ensure  => file,
       require => Php::Config['php-extension-mysqlnd_ms'],
       content => template('php/mysqlnd_ms.erb'),
