@@ -1,6 +1,6 @@
 # == Class: php::extension::mysqlnd_ms::params
 #
-# Defaults file for the tidy PHP extension
+# Defaults for the mysqlnd_ms PHP extension
 #
 # === Parameters
 #
@@ -23,8 +23,13 @@
 #   The path to the extension ini file
 #
 # [*settings*]
-#   Hash with 'set' nested hash of key => value
-#   set changes to agues when applied to *inifile*
+#   Array of agues 'set' commands
+#
+# [*plugin_config*]
+#   Hash defining master(s), slaves(s) and
+#
+# [*plugin_config_path*]
+#   Path to the plugin configuration file
 #
 # === Examples
 #
@@ -48,5 +53,6 @@ class php::extension::mysqlnd_ms::params {
   $settings = [
     'set "PHP/extension" "mysqlnd_ms.so"'
   ]
-
+  $plugin_config = {}
+  $plugin_config_path = '/etc/php5/mysqlnd_ms.json'
 }
