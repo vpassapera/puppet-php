@@ -41,11 +41,15 @@
 class php::extension::redis::params {
 
   $ensure   = $php::params::ensure
-  $package  = 'php5-redis'
   $provider = undef
   $inifile  = "${php::params::config_root_ini}/redis.ini"
   $settings = [
     'set ".anon/extension" "redis.so"'
   ]
 
+  if (versioncmp($php::params::major_version, "7") >= 0) {
+    $package  = 'php-redis'
+  } else {
+    $package  = 'php5-redis'
+  }
 }

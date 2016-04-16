@@ -1,6 +1,7 @@
 # == Class: php::extension::mysqlnd::params
 #
 # Defaults file for the native driver mysqlnd PHP extension
+# Enabled by default in PHP > 7
 #
 # === Parameters
 #
