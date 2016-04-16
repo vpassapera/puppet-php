@@ -90,7 +90,7 @@ class php::fpm(
     require => Package[$package]
   }
 
-  file { '/etc/php5/fpm/php-fpm.conf':
+  file { "${php::params::config_root}/fpm/php-fpm.conf":
     notify  => Service[$service_name],
     content => template('php/fpm/php-fpm.conf.erb'),
     owner   => root,
