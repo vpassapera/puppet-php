@@ -43,10 +43,10 @@ class php::extension::opcache::params {
   $provider = undef
   $inifile  = "${php::params::config_root_ini}/opcache.ini"
   $settings = [
-    'set ".anon/extension" "opcache.so"'
+    'set ".anon/zend_extension" "opcache.so"'
   ]
   if (versioncmp($php::params::major_version, "7") >= 0) {
-    $package  = "php${php::params::major_version}-opcode"
+    $package  = "php${php::params::major_version}-opcache"
   } else {
     $package  = undef
   }
