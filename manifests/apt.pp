@@ -55,5 +55,4 @@ class php::apt(
 
     Apt::Key['add_dotdeb_key'] -> Apt::Source["source_php_${release}"]
   }
-
 }
