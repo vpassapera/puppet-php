@@ -66,14 +66,14 @@ define php::fpm::pool (
   if ($ensure == 'absent') {
     file { "${php::params::config_root}/fpm/pool.d/${pool}.conf":
       ensure => absent,
-      notify => Service[$php::params::service_name],
-      require => Package[$php::params::package],
+      notify => Service[$php::fpm::params::service_name],
+      require => Package[$php::fpm::params::package],
     }
   } else {
     file { "${php::params::config_root}/fpm/pool.d/${pool}.conf":
       ensure  => file,
-      notify  => Service[$php::params::service_name],
-      require => Package[$php::params::package],
+      notify  => Service[$php::fpm::params::service_name],
+      require => Package[$php::fpm::params::package],
       content => template('php/fpm/pool.conf.erb'),
       owner   => root,
       group   => root,
